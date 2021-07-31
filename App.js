@@ -1,112 +1,94 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const emptyCircle = require("./src/images/circle-regular.png");
+const fullCircle = require("./src/images/circle-solid.png");
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  const [name, setName] = useState({
+    fName: "",
+    lName: ""
+  });
+  const onPress = () => setCount(prevCount => prevCount + 1);
+
+  const update = (index) => {
+    console.log(index);
+    // setName(prevValue => {
+    //   ...prevValue,
+    //   name: "test"
+    // })
+
+    let newSelectors = JSON.parse(JSON.stringify(selectors));
+    newSelectors.map(function(item) {
+      item.active = false;
+      return item
+    });
+    newSelectors[index].active = !newSelectors[index].active;
+    // console.log(newSelectors);
+    updateSelectors(newSelectors);
+    // updateSelectors(prevValue => {
+    //
+    // })
+  }
+
+  const [selectors, updateSelectors] = useState([
+    {name: 1, active: false},
+    {name: 2, active: false},
+    {name: 3, active: false},
+    {name: 4, active: false},
+    {name: 5, active: false},
+  ])
+
+  const List = () => {
+    return selectors.map((item, index) => {
+        return (
+          <View style={styles.individual} key={item.name}>
+            <Text>{item.name}{item.active}</Text>
+            <TouchableOpacity onPress={() => update(index)} >
+              {item.active ?
+                <Image source={fullCircle} style={styles.circle} />
+                :
+                <Image source={emptyCircle} style={styles.circle} />
+              }
+
+            </TouchableOpacity>
+          </View>
+        )
+      })
+  }
+
+
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.outerView}>
+      <Text>Cramps</Text>
+      <View style={styles.selectContainer}>
+        <List />
+      </View>
     </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  outerView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  circle: {
+    width: 40,
+    height: 40
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  selectContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly"
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  individual: {
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 export default App;
