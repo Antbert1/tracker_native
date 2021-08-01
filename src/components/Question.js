@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { saveAnswers } from '../redux/indexActions';
 const emptyCircle = require('../images/circle-regular.png');
 const fullCircle = require('../images/circle-solid.png');
 
 const Question = (props) => {
+    const dispatch = useDispatch();
+    const save = answers => dispatch(saveAnswers(answers));
+
     const update = (index) => {
         let newSelectors = [...selectors];
         newSelectors.map(function (item) {
@@ -12,6 +17,7 @@ const Question = (props) => {
         });
         newSelectors[index].active = !selectors[index].active;
         updateSelectors(newSelectors);
+        save(newSelectors);
     };
 
     const [selectors, updateSelectors] = useState([
