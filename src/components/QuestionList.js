@@ -24,12 +24,28 @@ const QuestionList = () => {
       .then((json) => setData(json));
   }
 
+  function postItems() {
+    var itemToPost = {
+      'question': 'sleep',
+      'value': 4,
+    }
+    fetch('http://192.168.1.128:8000/answers.json', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(itemToPost),
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Question name="Cramps" />
       <View style={styles.buttonContainer}>
         <Button title="Save" onPress={() => save()} />
         <Button title="Get Items" onPress={() => getItems()} />
+        <Button title="Post Items" onPress={() => postItems()} />
       </View>
     </View>
   );
