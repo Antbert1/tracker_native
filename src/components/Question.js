@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { saveAnswers } from '../redux/indexActions';
+import { setCurrentAnswerState } from '../redux/indexActions';
 const emptyCircle = require('../images/circle-regular.png');
 const fullCircle = require('../images/circle-solid.png');
 
 const Question = (props) => {
     const dispatch = useDispatch();
-    const save = answers => dispatch(saveAnswers(answers));
+    const currentAnswerState = useSelector(state => state).dataReducer.currentAnswerState;
+    // const save = answers => dispatch(saveAnswers(answers));
 
     const update = (index) => {
+        console.log(currentAnswerState);
+        console.log(props.index);
+        let newAnswerState = [...currentAnswerState];
+        newAnswerState[props.index].value = (index + 1);
         let newSelectors = [...selectors];
         newSelectors.map(function (item) {
             item.active = false;
@@ -17,15 +22,16 @@ const Question = (props) => {
         });
         newSelectors[index].active = !selectors[index].active;
         updateSelectors(newSelectors);
-        save(newSelectors);
+        dispatch(setCurrentAnswerState(newAnswerState));
+        // save(newSelectors);
     };
 
     const [selectors, updateSelectors] = useState([
-        { name: 1, active: false },
-        { name: 2, active: false },
-        { name: 3, active: false },
-        { name: 4, active: false },
-        { name: 5, active: false },
+        { name: 1, active: currentAnswerState[props.index].value === 1 },
+        { name: 2, active: currentAnswerState[props.index].value === 2 },
+        { name: 3, active: currentAnswerState[props.index].value === 3 },
+        { name: 4, active: currentAnswerState[props.index].value === 4 },
+        { name: 5, active: currentAnswerState[props.index].value === 5 },
     ]);
 
     const List = () => {
@@ -47,7 +53,10 @@ const Question = (props) => {
 
     return (
         <View style={styles.container}>
-            <Text>{props.name} </Text>
+            <Text style={styles.nameStyle}>{props.name} </Text>
+            <Text style={styles.subtext}>
+                {props.subtext}
+            </Text>
             <View style={styles.selectContainer}>
                 <List />
             </View>
@@ -58,8 +67,10 @@ const Question = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // marginLeft: 10,
+        // marginRight: 10
     },
     outerView: {
         flex: 1,
@@ -78,7 +89,16 @@ const styles = StyleSheet.create({
     individual: {
         justifyContent: 'center',
         alignItems: 'center',
-    }
+        paddingTop: 10,
+        paddingBottom: 40,
+    },
+    nameStyle: {
+        // paddingLeft: 10,
+        fontSize: 16,
+    },
+    subtext: {
+        // paddingLeft: 10,
+    },
 });
 
 export default Question;
