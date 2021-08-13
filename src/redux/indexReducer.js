@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { SAVE_ANSWERS, SET_CURRENT_ANSWER_STATE } from './indexActions';
+import { SAVE_ANSWERS, SET_CURRENT_ANSWER_STATE, SHOW_BUTTON, PERIOD_ENABLED } from './indexActions';
 const defaultText = '1 for fine/nothing, 5 for worst';
 const dataState = {
     answers: [
@@ -10,20 +10,23 @@ const dataState = {
         { name: 5, active: false },
     ],
     currentAnswerState: [
-        { name: 'Cramps', subtext: defaultText, value: null },
-        { name: 'Boobs', subtext: '1 for normal, 5 for huge', value: null },
-        { name: 'Sex Drive', subtext: '1 for bad, 5 for good', value: null },
-        { name: 'Sweating', subtext: defaultText, value: null },
-        { name: 'Mood', subtext: defaultText, value: null },
-        { name: 'Anxiety', subtext: defaultText, value: null },
-        { name: 'Appetite', subtext: '1 for bad, 5 for good', value: null },
-        { name: 'Headache', subtext: defaultText, value: null },
-        { name: 'Acne', subtext: defaultText, value: null },
-        { name: 'Temperature', subtext: defaultText, value: null },
-        { name: 'Sleep', subtext: defaultText, value: null },
-        { name: 'Nightmares', subtext: defaultText, value: null },
-        { name: 'Ovulation Guess', subtext: '1 for definitely not, 5 for definitely', value: null },
+        { "question": "Period", subtext: '1 for light, 5 for heavy', "value": -1 },
+        { "question": "Cramps", subtext: defaultText, "value": null },
+        { "question": "Boobs", subtext: '1 for normal, 5 for huge', "value": null },
+        { "question": "Sex Drive", subtext: '1 for bad, 5 for good', "value": null },
+        { "question": "Sweating", subtext: defaultText, "value": null },
+        { "question": "Mood", subtext: defaultText, "value": null },
+        { "question": "Anxiety", subtext: defaultText, "value": null },
+        { "question": "Appetite", subtext: '1 for bad, 5 for good', "value": null },
+        { "question": "Headache", subtext: defaultText, "value": null },
+        { "question": "Acne", subtext: defaultText, "value": null },
+        { "question": "Temperature", subtext: defaultText, "value": null },
+        { "question": "Sleep", subtext: defaultText, "value": null },
+        { "question": "Nightmares", subtext: defaultText, "value": null },
+        { "question": "Ovulation Guess", subtext: '1 for definitely not, 5 for definitely', "value": null },
     ],
+    showButton: false,
+    periodEnabled: false,
 };
 
 const dataReducer = (state = dataState, action) => {
@@ -33,6 +36,12 @@ const dataReducer = (state = dataState, action) => {
             return state;
         case SET_CURRENT_ANSWER_STATE:
             state = Object.assign({}, state, { currentAnswerState: action.currentAnswerState });
+            return state;
+        case SHOW_BUTTON:
+            state = Object.assign({}, state, { showButton: action.showButton });
+            return state;
+        case PERIOD_ENABLED:
+            state = Object.assign({}, state, { periodEnabled: action.periodEnabled });
             return state;
         default:
             return state;

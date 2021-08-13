@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { setCurrentAnswerState } from '../redux/indexActions';
+import { setCurrentAnswerState, setShowButton } from '../redux/indexActions';
 const emptyCircle = require('../images/circle-regular.png');
 const fullCircle = require('../images/circle-solid.png');
 
 const Question = (props) => {
     const dispatch = useDispatch();
     const currentAnswerState = useSelector(state => state).dataReducer.currentAnswerState;
+    const periodEnabled = useSelector(state => state).dataReducer.periodEnabled;
     // const save = answers => dispatch(saveAnswers(answers));
 
     const update = (index) => {
         console.log(currentAnswerState);
         console.log(props.index);
+        let activeCheck = true;
         let newAnswerState = [...currentAnswerState];
         newAnswerState[props.index].value = (index + 1);
+        if (newAnswerState.some(e => e.value === null)) {
+            activeCheck = false;
+        }
         let newSelectors = [...selectors];
         newSelectors.map(function (item) {
             item.active = false;
@@ -23,6 +28,7 @@ const Question = (props) => {
         newSelectors[index].active = !selectors[index].active;
         updateSelectors(newSelectors);
         dispatch(setCurrentAnswerState(newAnswerState));
+        dispatch(setShowButton(activeCheck));
         // save(newSelectors);
     };
 
@@ -50,18 +56,24 @@ const Question = (props) => {
             );
         });
     };
-
-    return (
-        <View style={styles.container}>
-            <Text style={styles.nameStyle}>{props.name} </Text>
-            <Text style={styles.subtext}>
-                {props.subtext}
-            </Text>
-            <View style={styles.selectContainer}>
-                <List />
+    if (!periodEnabled && props.question == 'Period') {
+        return <View></View>
+    } else {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.nameStyle}>{props.question} </Text>
+                <Text style={styles.subtext}>
+                    {props.subtext}
+                </Text>
+                <View style={styles.selectContainer}>
+                    <List />
+                </View>
             </View>
-        </View>
-    );
+        );
+    }
+
+
+
 };
 
 const styles = StyleSheet.create({
